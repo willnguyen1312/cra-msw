@@ -32,7 +32,13 @@ function greetingReducer(state: State, action: Action) {
   }
 }
 
-export default function Fetch({ url }: { url: string }) {
+export default function Fetch({
+  url,
+  failed,
+}: {
+  url: string;
+  failed: boolean;
+}) {
   const [{ error, greeting }, dispatch] = useReducer(greetingReducer, {});
   const [buttonClicked, setButtonClicked] = useState(false);
 
@@ -50,7 +56,9 @@ export default function Fetch({ url }: { url: string }) {
       });
   };
 
-  const buttonText = buttonClicked ? "Ok" : "Load Greeting";
+  const buttonText = buttonClicked
+    ? "Ok"
+    : `Load ${failed ? "Failed" : ""} Greeting`;
 
   return (
     <div>

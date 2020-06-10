@@ -5,7 +5,7 @@ import Fetch from ".";
 import { server, rest } from "../setupTests";
 
 test("loads and displays greeting", async () => {
-  render(<Fetch url="/greeting" />);
+  render(<Fetch url="/greeting" failed={false} />);
 
   fireEvent.click(screen.getByText("Load Greeting"));
 
@@ -22,7 +22,18 @@ test("handlers server error", async () => {
     })
   );
 
-  render(<Fetch url="/greeting" />);
+  render(<Fetch url="/greeting" failed={false} />);
+
+  fireEvent.click(screen.getByText("Load Greeting"));
+
+  await waitFor(() => screen.getByRole("alert"));
+
+  expect(screen.getByRole("alert")).toHaveTextContent("Oops, failed to fetch!");
+  expect(screen.getByRole("button")).not.toHaveAttribute("disabled");
+});
+
+test("handlers server error", async () => {
+  render(<Fetch url="/greetingFail" failed={false} />);
 
   fireEvent.click(screen.getByText("Load Greeting"));
 
